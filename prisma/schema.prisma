@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // url      = env("DATABASE_URL")
+  url = "postgres://wladknd:347511@localHost:5432/wladknd"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  publicAddress String   @unique
+  nonce         Int
+  email         String   @unique
+  username      String?  @unique
+  steamId       String?  @unique
+  firstName     String
+  surname       String
+
+}
+
+// model NFT {
+//   id          Int
+//   name        String
+//   description String
+//   power       Int
+//   durability  Int
+  
+//   user        User       @relation(fields: [owner], references: [publicAddress])
+//   owner       String     @unique
+
+//   sold        Boolean
+// }
