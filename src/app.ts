@@ -55,6 +55,7 @@ const start = async () => {
 
     app.get('/api/auth/steam', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
         console.log("REQ_USER_1", req.user);
+        res.cookie("jwt", req.cookies.jwt)
     });
 
     app.get('/api/auth/steam/return', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
