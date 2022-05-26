@@ -62,7 +62,7 @@ const start = async () => {
     app.get('/api/auth/steam/return', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
         console.log("REQ_USER_2", req);
         console.log("REQ_USER_2_COOKIES", req.cookies);
-        updateSteam(req)
+        // updateSteam(req)
         res.redirect("http://localhost:3000/profile")
     });
 

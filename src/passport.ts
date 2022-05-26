@@ -9,6 +9,9 @@ export const steamStrategy = new SteamStrategy(
     function(identifier: any, profile:any, done: any) {
         process.nextTick(function () {
             profile.identifier = identifier;
+            console.log("IDENTIFIER", identifier);
+            console.log("PROFILE", profile);
+            
             
             return done(null, profile);
         })
