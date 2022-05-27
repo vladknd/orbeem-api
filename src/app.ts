@@ -63,7 +63,7 @@ const start = async () => {
         console.log("REQ_USER_2", req);
         console.log("REQ_USER_2_COOKIES", req.cookies);
         // updateSteam(req)
-        res.redirect("http://localhost:3000/profile")
+        res.redirect("https://orbeem-client-fwmxi7cmv-vladknd.vercel.app/profile")
     });
 
     const updateSteam = async (request: any) => {
