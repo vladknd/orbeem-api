@@ -4,7 +4,7 @@ export const steamStrategy = new SteamStrategy(
     {
         //HEROKU:
         returnURL: 'http://orbeem-api.herokuapp.com/api/auth/steam/return',
-        realm: 'http://https://orbeem-api.herokuapp.com/',
+        realm: 'http://orbeem-api.herokuapp.com/',
 
         //LOCAL:
         // returnURL: 'http://localhost:4000/api/auth/steam/return',
