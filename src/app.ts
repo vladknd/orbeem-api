@@ -62,8 +62,10 @@ const start = async () => {
     app.get('/api/auth/steam/return', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
         console.log("REQ_USER_2", req);
         console.log("REQ_USER_2_COOKIES", req.cookies);
-        res.send(req.user)
-        res.redirect("http://orbeem-client.vercel.app/profile")
+        res.send(req.cookies)
+        // res.redirect("http://orbeem-client.vercel.app/profile")
+        
+        
         // updateSteam(req)
     });
 
