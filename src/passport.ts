@@ -3,12 +3,12 @@ const SteamStrategy = require('passport-steam').Strategy;
 export const steamStrategy = new SteamStrategy(
     {
         //HEROKU:
-        returnURL: 'http://orbeem-api.herokuapp.com/api/auth/steam/return',
-        realm: 'http://orbeem-api.herokuapp.com/',
+        // returnURL: 'http://orbeem-api.herokuapp.com/api/auth/steam/return',
+        // realm: 'http://orbeem-api.herokuapp.com/',
 
         //LOCAL:
-        // returnURL: 'http://localhost:4000/api/auth/steam/return',
-        // realm: 'http://localhost:4000/',
+        returnURL: 'http://localhost:4000/api/auth/steam/return',
+        realm: 'http://localhost:4000/',
 
 
         apiKey: 'A8066F8A67DC0B85AD609380454B8065'
