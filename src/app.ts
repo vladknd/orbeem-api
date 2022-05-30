@@ -2,10 +2,12 @@
 //#----------------------------------------------------------------#
 
 //#--------------------GLOBAL-IMPORTS:-----------------------------#
+import cors from "cors";
 import express from "express"
 const passport =  require('passport')
 // const SteamStrategy = require('passport-steam')
 import jwt from "jsonwebtoken"
+import config from "./config";
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
 // import SteamStrategy from 'passport-steam'
@@ -39,6 +41,14 @@ const start = async () => {
     await apolloServer.start() 
     apolloServer.applyMiddleware({ app })
 
+    app.use(
+        cors({
+             origin: config.client, // allow to server to accept request from different origin
+             methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+             credentials: true, // allow session cookie from browser to pass through
+       })
+    )
+
     app.use(session(
         {
             secret: 'your secret',
@@ -57,13 +67,12 @@ const start = async () => {
         passport.authenticate('steam', {failureRedirect: '/'}), 
         (req, res) => {
 
-            console.log("REQ_USER_1", req.user);
+            // console.log("REQ_USER_1", req.user);
             // res.cookie("jwt", req.cookies.jwt)
-            res.cookie("JWT", req.cookies.jwt)
-            res.send()
+            // res.send()
         }
     );
-
+   
     app.get('/api/auth/steam/return', 
         passport.authenticate('steam', {failureRedirect: '/'}), 
         (req, res) => {
@@ -72,8 +81,10 @@ const start = async () => {
         // res.send(req.user)
             console.log("REQ_USER", req.user);
             console.log("REQ_COOKIES", req.cookies);
-            // res.redirect("http://localhost:3000/profile")
-            res.redirect("https://orbeem-client.vercel.app/")
+            console.log("PARAMS", req.params);
+            res.redirect("http://localhost:3000/profile")
+            // res.
+            // res.redirect("https://orbeem-client.vercel.app/")
             
         
         
