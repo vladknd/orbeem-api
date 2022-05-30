@@ -53,21 +53,13 @@ const start = async () => {
     app.use(passport.initialize())
     app.use(passport.session())
 
-    function addJWTMiddleware(
-        req: Express.Request, 
-        res: Express.Response, 
-        next: any
-    ){
-        res.set('JWT', req)
-    }
-
     app.get('/api/auth/steam', 
         passport.authenticate('steam', {failureRedirect: '/'}), 
         (req, res) => {
 
             console.log("REQ_USER_1", req.user);
             // res.cookie("jwt", req.cookies.jwt)
-            // res.send()
+            res.cookie("JWT", req.cookies.jwt)
         }
     );
 
