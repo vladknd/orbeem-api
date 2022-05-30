@@ -60,6 +60,7 @@ const start = async () => {
             console.log("REQ_USER_1", req.user);
             // res.cookie("jwt", req.cookies.jwt)
             res.cookie("JWT", req.cookies.jwt)
+            res.send()
         }
     );
 
