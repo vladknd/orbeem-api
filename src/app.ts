@@ -53,21 +53,40 @@ const start = async () => {
     app.use(passport.initialize())
     app.use(passport.session())
 
-    app.get('/api/auth/steam', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
-        console.log("REQ_USER_1", req.user);
-        // res.cookie("jwt", req.cookies.jwt)
-        // res.send()
-    });
+    function addJWTMiddleware(
+        req: Express.Request, 
+        res: Express.Response, 
+        next: any
+    ){
+        res.set('JWT', req)
+    }
 
-    app.get('/api/auth/steam/return', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
-        console.log("REQ_USER_2", req);
-        console.log("REQ_USER_2_COOKIES", req.cookies);
-        res.send(req.user)
-        // res.redirect("http://orbeem-client.vercel.app/profile")
+    app.get('/api/auth/steam', 
+        passport.authenticate('steam', {failureRedirect: '/'}), 
+        (req, res) => {
+
+            console.log("REQ_USER_1", req.user);
+            // res.cookie("jwt", req.cookies.jwt)
+            // res.send()
+        }
+    );
+
+    app.get('/api/auth/steam/return', 
+        passport.authenticate('steam', {failureRedirect: '/'}), 
+        (req, res) => {
+        // console.log("REQ_USER_2", req);
+        // console.log("REQ_USER_2_COOKIES", req.cookies);
+        // res.send(req.user)
+            console.log("REQ_USER", req.user);
+            console.log("REQ_COOKIES", req.cookies);
+            // res.redirect("http://localhost:3000/profile")
+            res.redirect("https://orbeem-client.vercel.app/")
+            
         
         
         // updateSteam(req)
-    });
+        }
+    );
 
     const updateSteam = async (request: any) => {
         const decoded = await jwt.verify(request.cookies.jwt, "hihi")
