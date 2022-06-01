@@ -16,6 +16,7 @@ export interface INewUser {
     email: string;
     firstName: string;
     surname: string;
+    username: string;
 }
 
 export const createUser = async (newUser: INewUser): Promise<IUser> => {
@@ -41,14 +42,24 @@ export const findUser = async (publicAddress: string): Promise<IUser | null> => 
     return user
 }
 
-export const updateUserSteam = async (publicAddress: string, steamId: string, username: string): Promise<IUser | null> => {
+// export const findUserUsername = async (username: string): Promise<IUser | null> => {
+//     const user = await prismaClient.user.findUnique({
+//         where: {
+//             username
+//         }
+//     })
+//     console.log("FOUND USER:", user)
+    
+//     return user
+// }
+
+export const updateUserSteam = async (username: string, steamId: string): Promise<IUser | null> => {
     const updatedUser = await prismaClient.user.update({
         where: {
-            publicAddress
+            username
         },
         data: {
-            steamId,
-            username
+            steamId
         }
     })
     return updatedUser

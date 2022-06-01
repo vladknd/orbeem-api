@@ -12,6 +12,7 @@ export const typedefRegisterMutation = gql`
             email: String!,
             firstName: String!,
             surname: String!
+            username: String!
         ): AuthRes
     }
 `
@@ -23,14 +24,16 @@ export const resolveRegisterMutation = {
             publicAddress,
             email,
             firstName,
-            surname
+            surname, 
+            username
         }: INewUser,
     ):Promise<IAuthRes> => {
         const authRes = await registerService({
             publicAddress,
             email,
             firstName,
-            surname
+            surname,
+            username
         })
         console.log("AUTH-RES:", authRes);
         

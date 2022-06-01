@@ -63,7 +63,8 @@ export const registerService = async (newUser: INewUser) => {
         publicAddress: newUser.publicAddress,
         email: newUser.email,
         firstName: newUser.firstName,
-        surname: newUser.surname
+        surname: newUser.surname,
+        username: newUser.username
     })
     console.log("REGISTERED USER", user) 
     

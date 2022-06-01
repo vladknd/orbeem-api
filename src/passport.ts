@@ -1,5 +1,6 @@
 const SteamStrategy = require('passport-steam').Strategy;
 import config from './config'
+import { updateUserSteam } from './services/user/user.service';
 
 export const steamStrategy = new SteamStrategy(
     {
@@ -19,8 +20,23 @@ export const steamStrategy = new SteamStrategy(
         console.log("PASSPORT CALLBACK FIRED!")
         console.log("IDENTIFIER", identifier);
         console.log("PROFILE", profile);
+
+        verifySteam(profile.displayName, profile.id).then(_promise => {
+            console.log("USER SUCCESFULLY VERIFIED!")
+        }).catch(error => {
+            console.log("USER COULD NOT BE VERIFIED!")
+        })
+
         return done(null, profile);
         
         
     }
 )
+
+const verifySteam = async (username: string, steamId: string) => {
+    updateUserSteam(username, steamId).then((_promise) => {
+        console.log("USER's STEAM HAS BEEN VERIFIED!", _promise);
+    }).catch(error => {
+        console.log("USER's STEAM COULD NOT BE VERIFIED!", error)  
+    })
+}

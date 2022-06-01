@@ -41,13 +41,13 @@ const start = async () => {
     await apolloServer.start() 
     apolloServer.applyMiddleware({ app })
 
-    app.use(
-        cors({
-             origin: config.client, // allow to server to accept request from different origin
-             methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-             credentials: true, // allow session cookie from browser to pass through
-       })
-    )
+    // app.use(
+    //     cors({
+    //          origin: config.client, // allow to server to accept request from different origin
+    //          methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    //          credentials: true, // allow session cookie from browser to pass through
+    //    })
+    // )
 
     app.use(session(
         {
@@ -66,39 +66,31 @@ const start = async () => {
     app.get('/api/auth/steam', 
         passport.authenticate('steam', {failureRedirect: '/'}), 
         (req, res) => {
-
-            // console.log("REQ_USER_1", req.user);
-            // res.cookie("jwt", req.cookies.jwt)
-            // res.send()
+            console.log("REQ_USER_1", req.user);
         }
-    );
+    )
    
     app.get('/api/auth/steam/return', 
         passport.authenticate('steam', {failureRedirect: '/'}), 
         (req, res) => {
-        // console.log("REQ_USER_2", req);
-        // console.log("REQ_USER_2_COOKIES", req.cookies);
-        // res.send(req.user)
             console.log("REQ_USER", req.user);
             console.log("REQ_COOKIES", req.cookies);
             console.log("PARAMS", req.params);
             res.redirect("http://localhost:3000/profile")
-            // res.
-            // res.redirect("https://orbeem-client.vercel.app/")
-            
-        
-        
-        // updateSteam(req)
         }
-    );
+    )
 
-    const updateSteam = async (request: any) => {
-        const decoded = await jwt.verify(request.cookies.jwt, "hihi")
-        console.log("DECODED JWT STEAM", decoded)
-        if(typeof decoded !== "string"){
-            await updateUserSteam(decoded.publicAddress, request.user.id, request.user.displayName)
-        }
-    }
+    app.post('/api/update-steam', (req, res) => {
+        console.log(req)
+    })
+
+    // const updateSteam = async (request: any) => {
+    //     const decoded = await jwt.verify(request.cookies.jwt, "hihi")
+    //     console.log("DECODED JWT STEAM", decoded)
+    //     if(typeof decoded !== "string"){
+    //         await updateUserSteam(decoded.publicAddress, request.user.id, request.user.displayName)
+    //     }
+    // }
 
     app.listen(process.env.PORT || 4000, () => {
         console.log('SERVER RUNS ON PORT: ', 4000)
