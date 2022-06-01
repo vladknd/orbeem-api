@@ -76,7 +76,7 @@ const start = async () => {
             console.log("REQ_USER", req.user);
             console.log("REQ_COOKIES", req.cookies);
             console.log("PARAMS", req.params);
-            res.redirect("http://localhost:3000/profile")
+            res.redirect(`${config.client}/profile"`)
         }
     )
 
