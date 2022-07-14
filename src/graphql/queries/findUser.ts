@@ -25,6 +25,8 @@ export const resolveFindUserQuery = {
         }: Args,
     ) => {
         const user = await findUser(publicAddress)
+        console.log("API FOUND USER:", user);
+        
         if(user) return {
             publicAddress: user.publicAddress,
             nonce: user.nonce

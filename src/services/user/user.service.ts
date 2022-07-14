@@ -10,6 +10,7 @@ export interface IUser {
     firstName: string;
     surname: string;
     steamId: string | null;
+    balance: number;
 }
 export interface INewUser {
     publicAddress: string;
@@ -37,21 +38,27 @@ export const findUser = async (publicAddress: string): Promise<IUser | null> => 
             publicAddress
         }
     })
-    console.log("FOUND USER:", user)
+    console.log("PRISMA FOUND USER:", user)
     
     return user
 }
 
-// export const findUserUsername = async (username: string): Promise<IUser | null> => {
-//     const user = await prismaClient.user.findUnique({
-//         where: {
-//             username
-//         }
-//     })
-//     console.log("FOUND USER:", user)
+export const findSteamID = async (_publicAddress: string): Promise<string | null> => {
+    const user = await prismaClient.user.findUnique({
+        where: {
+            publicAddress: _publicAddress
+        }
+    })
+    console.log("FOUND USER:", user)
+
+    if(user && user.steamId){
+        const { steamId } = user
+        return steamId
+    } else {
+        return null
+    }
     
-//     return user
-// }
+}
 
 export const updateUserSteam = async (username: string, steamId: string): Promise<IUser | null> => {
     const updatedUser = await prismaClient.user.update({
@@ -63,4 +70,25 @@ export const updateUserSteam = async (username: string, steamId: string): Promis
         }
     })
     return updatedUser
+}
+
+export const updateBalance = async (_publicAddress: string, _newBalance: number) => {
+    const updatedUser = await prismaClient.user.update({
+        where: {
+            publicAddress: _publicAddress
+        },
+        data: {
+            balance: _newBalance
+        }
+    })
+    return updatedUser.balance
+}
+
+export const getBalance = async (_publicAddress: string) => {
+    const user = await prismaClient.user.findUnique({
+        where: {
+            publicAddress: _publicAddress
+        }
+    })
+    return user?.balance
 }

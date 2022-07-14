@@ -12,10 +12,15 @@ import { typedefUser } from "./types";
 //---------------------QUERIES:
 import { typedefFindUserQuery } from "./queries/findUser"
 import { typedefFindUserByAddressQuery } from "./queries/findUserByAddress"
+
+import { typedefClaimTokensQuery } from "./queries/claimTokens.query"
 //---------------------MUTATIONS:
 import { typedefRegisterMutation } from "./mutations/register"
 import { typedefLoginMutation } from "./mutations/login"
 import { typedefVerifyJwtMutation } from "./mutations/verifyJWT"
+
+import { typedefMintTokensMutation } from "./mutations/mintTokens.mutation"
+
 
 
 
@@ -45,9 +50,11 @@ export default [
     //------------------QUERIES:
     typedefFindUserQuery,
     typedefFindUserByAddressQuery,
+    typedefClaimTokensQuery,
 
     //------------------MUTATIONS:
     typedefRegisterMutation,
     typedefLoginMutation, 
-    typedefVerifyJwtMutation
+    typedefVerifyJwtMutation,
+    typedefMintTokensMutation
 ]
