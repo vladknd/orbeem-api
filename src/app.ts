@@ -15,7 +15,7 @@ const session = require('express-session');
 import initApolloServer from "./graphql"
 import { steamStrategy } from "./passport"
 
-import { findUser, updateUserSteam } from "./services/user/user.service"
+import { findUser, getBalance, updateUserSteam } from "./services/user/user.service"
 //#--------------------BODY----------------------------------------#
 const start = async () => {
     
@@ -41,13 +41,13 @@ const start = async () => {
     await apolloServer.start() 
     apolloServer.applyMiddleware({ app })
 
-    app.use(
-        cors({
-             origin: config.client, // allow to server to accept request from different origin
-             methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-             credentials: true, // allow session cookie from browser to pass through
-       })
-    )
+    // app.use(
+    //     cors({
+    //          origin: config.client, // allow to server to accept request from different origin
+    //          methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    //          credentials: true, // allow session cookie from browser to pass through
+    //    })
+    // )
 
     app.use(session(
         {
@@ -80,6 +80,14 @@ const start = async () => {
         }
     )
 
+    app.get('/balance/:address', async (req, res) => {
+        console.log(req.params);
+        const publicAddress = req.params.address
+        const balance = await getBalance(publicAddress)
+        console.log(balance);
+        
+        res.send({balance})
+    })
     app.post('/api/update-steam', (req, res) => {
         console.log(req)
     })
