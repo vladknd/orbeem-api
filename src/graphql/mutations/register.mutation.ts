@@ -12,7 +12,7 @@ export const typedefRegisterMutation = gql`
             email: String!,
             firstName: String!,
             surname: String!
-            steamId: Int!
+            steamId: String!
         ): AuthRes
     }
 `
