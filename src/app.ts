@@ -40,13 +40,13 @@ const start = async () => {
     await apolloServer.start() 
     apolloServer.applyMiddleware({ app })
 
-    // app.use(
-    //     cors({
-    //          origin: config.client, // allow to server to accept request from different origin
-    //          methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    //          credentials: true, // allow session cookie from browser to pass through
-    //    })
-    // )
+    app.use(
+        cors({
+             origin: config.client, // allow to server to accept request from different origin
+             methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+             credentials: true, // allow session cookie from browser to pass through
+       })
+    )
 
     app.use(session(
         {
