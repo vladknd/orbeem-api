@@ -44,6 +44,7 @@
     "express": "^4.17.2",
     "express-session": "^1.17.3",
     "graphql": "^16.2.0",
+    "graphql-scalars": "^1.17.0",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^3.2.6",
     "passport": "^0.6.0",

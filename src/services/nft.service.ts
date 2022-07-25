@@ -1,5 +1,5 @@
 import { prisma } from "@prisma/client";
-import { prismaClient } from "../../db";
+import { prismaClient } from "../db";
 
 
 export interface INFT {

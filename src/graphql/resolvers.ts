@@ -1,24 +1,26 @@
 //#--------------------RESOLVERS---------------------------#
 //#--------------------------------------------------------#
-
+import {
+   resolvers as scalarResolvers,
+ } from 'graphql-scalars';
 //#--------------------LOCAL-IMPORTS-----------------------#
 //---------------------QUERIES:
-import { resolveFindUserQuery } from "./queries/findUser"
-import { resolveFindUserByAddressQuery } from "./queries/findUserByAddress"
+import { resolveFindUserQuery } from "./queries/findUser.query"
+import { resolveFindUserByAddressQuery } from "./queries/findUserByAddress.query"
 
 import { resolveClaimTokensQuery } from "./queries/claimTokens.query"
 //---------------------MUTATIONS:
-import { resolveRegisterMutation } from "./mutations/register"
-import { resolveLoginMutation } from "./mutations/login"
-import { resolveVerifyJwtMutation } from "./mutations/verifyJWT"
+import { resolveRegisterMutation } from "./mutations/register.mutation"
+import { resolveLoginMutation } from "./mutations/login.mutation"
+import { resolveVerifyJwtMutation } from "./mutations/verifyJWT.mutation"
 import { resolveMintTokensMutation } from "./mutations/mintTokens.mutation"
 
 //#--------------------BODY--------------------------------#
 const resolvers = {
+   // scalarResolvers,
     Query: {
        ...resolveFindUserQuery,
        ...resolveFindUserByAddressQuery,
-
        ...resolveClaimTokensQuery
     },
 
@@ -27,7 +29,8 @@ const resolvers = {
        ...resolveLoginMutation,
        ...resolveVerifyJwtMutation,
        ...resolveMintTokensMutation
-    }
+    },
+    
 }
 
 export default resolvers

@@ -1,8 +1,7 @@
-import { dischargeNFT, getNFT, getNFTCharge, INFT, INFTData } from "../nft/nft.service";
-import { findSteamID, findUser, getBalance, IUser, updateBalance } from "../user/user.service";
+import { dischargeNFT, getNFT, getNFTCharge, INFT, INFTData } from "./nft.service";
+import { findSteamID, findUser, getBalance, updateBalance } from "./user.service";
 import axios from 'axios'
-
-
+import { prisma, User } from "@prisma/client";
 
 class Game {
     private KILL_FACTOR = 1;
@@ -12,7 +11,7 @@ class Game {
     private tokenID: number;
     private publicAddress: string;
 
-    private user: IUser | null = null;
+    private user: User | null = null;
     private nft: INFT | null = null;
     private nftData: INFTData | null = null;
     
@@ -54,7 +53,9 @@ class Game {
             
             if(verified && charged){
                 if(this.user){
-                    const matchResults = await this.calculateAward()
+                    const matchResults = await this.calculateAward(this.nftData)
+                    console.log("MATCH RESULTS", matchResults);
+                    
                     return matchResults
                 }
             }   
@@ -73,14 +74,15 @@ class Game {
         return null
     }
 
-    private async calculateAward(){
+    private async calculateAward(_nftData: INFTData){
         if(this.user){
             const res = await axios.get(`https://api.opendota.com/api/players/${this.user.steamId}/recentMatches`)
             const data = res.data
 
             const {kills, deaths, assists} = data[0]
-            const award = this.KILL_FACTOR*kills + deaths/this.DEATH_FACTOR + this.ASSIST_FACTOR*assists
-
+            const award = Math.round(this.KILL_FACTOR*kills*_nftData.power - deaths/(this.DEATH_FACTOR*_nftData.durability) + this.ASSIST_FACTOR*assists*_nftData.intelligence)
+            console.log("CALCULATED AWARD", award);
+            
             return {
                 award,
                 kills,
@@ -117,8 +119,7 @@ class Game {
                     `
                 })
             })
-            // console.log("AXIOS",res)
-        
+
             const nft = res.data.data.runes[0]
             console.log("AXIOS NFT DATA", nft)
 

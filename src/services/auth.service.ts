@@ -1,12 +1,13 @@
 import { recoverPersonalSignature } from "eth-sig-util";
 import { bufferToHex } from "ethereumjs-util";
-import { prismaClient } from "../../db"
+import { prismaClient } from "../db"
 import jwt from "jsonwebtoken"
-import { createUser, INewUser, IUser } from "../user/user.service";
+import { createUser, INewUser} from "./user.service";
+import { User } from "@prisma/client";
 
 export interface IAuthRes {
-    user: IUser;
-    token: string;
+    user: User | null;
+    token: string | null;
 }
 export interface IAuthReq {
     publicAddress: string;
@@ -58,23 +59,28 @@ export const loginService = async (authData: IAuthReq): Promise<IAuthRes> => {
 }
 
 //_____________________________REGISTRATION-SERVICE________________________________
-export const registerService = async (newUser: INewUser) => {
-    const user: IUser = await createUser({
+export const registerService = async (newUser: INewUser): Promise<IAuthRes> => {
+    const user: User | null = await createUser({
         publicAddress: newUser.publicAddress,
         email: newUser.email,
         firstName: newUser.firstName,
         surname: newUser.surname,
-        username: newUser.username
+        steamId: newUser.steamId
     })
     console.log("REGISTERED USER", user) 
     
-    const token = generateToken({
-        id: user.id,
-        publicAddress: user.publicAddress
-    })
-    console.log("TOKEN GENERATED", token)
-    
-    return {user, token}
+    if(user){
+        const token = generateToken({
+            id: user.id,
+            publicAddress: user.publicAddress
+        })
+        console.log("TOKEN GENERATED", token)
+        return {user, token}
+    }
+    return {
+        user: null,
+        token: null
+    }
 }
 
 //__________________________TOKEN-GENERATOR_____________________________

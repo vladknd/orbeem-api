@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server-express'
-import Game from '../../services/game/game.service';
+import Game from '../../services/game.service';
 
 export const typedefClaimTokensQuery = gql`
     type MatchResults {

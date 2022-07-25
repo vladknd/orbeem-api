@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express"
 import jwt from "jsonwebtoken"
-import { findUser } from "../../services/user/user.service"
+import { findUser } from "../../services/user.service"
 
 export const typedefVerifyJwtMutation = gql`
     extend type Mutation {
@@ -15,6 +15,8 @@ export const resolveVerifyJwtMutation = {
             token
         }: { token: string}
     ) => {
+        console.log("VERIFY JWT MUTATION INITIATED:")
+        
         const decoded = await jwt.verify(token, "hihi")
         if(typeof decoded !== "string"){
             console.log("DECODED", decoded.publicAddress)

@@ -5,17 +5,16 @@
 import cors from "cors";
 import express from "express"
 const passport =  require('passport')
-// const SteamStrategy = require('passport-steam')
 import jwt from "jsonwebtoken"
-import config from "./config";
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
-// import SteamStrategy from 'passport-steam'
+
 //#--------------------LOCAL-IMPORTS:------------------------------#
-import initApolloServer from "./graphql"
+import config from "./config";
+import initApolloServer from "./graphql/graphServer"
 import { steamStrategy } from "./passport"
 
-import { findUser, getBalance, updateUserSteam } from "./services/user/user.service"
+import { findUser, getBalance, updateUserSteam } from "./services/user.service"
 //#--------------------BODY----------------------------------------#
 const start = async () => {
     
@@ -92,13 +91,6 @@ const start = async () => {
         console.log(req)
     })
 
-    // const updateSteam = async (request: any) => {
-    //     const decoded = await jwt.verify(request.cookies.jwt, "hihi")
-    //     console.log("DECODED JWT STEAM", decoded)
-    //     if(typeof decoded !== "string"){
-    //         await updateUserSteam(decoded.publicAddress, request.user.id, request.user.displayName)
-    //     }
-    // }
 
     app.listen(process.env.PORT || 4000, () => {
         console.log('SERVER RUNS ON PORT: ', 4000)

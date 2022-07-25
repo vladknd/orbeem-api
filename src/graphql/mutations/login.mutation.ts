@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express"
-import { loginService, IAuthReq, IAuthRes } from "../../services/auth/auth.service"
-import { findUser } from "../../services/user/user.service"
+import { loginService, IAuthReq, IAuthRes } from "../../services/auth.service"
+import { findUser } from "../../services/user.service"
 
 
 export const typedefLoginMutation = gql`

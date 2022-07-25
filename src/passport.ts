@@ -1,6 +1,6 @@
 const SteamStrategy = require('passport-steam').Strategy;
 import config from './config'
-import { updateUserSteam } from './services/user/user.service';
+import { setVerified, updateUserSteam } from './services/user.service';
 
 export const steamStrategy = new SteamStrategy(
     {
@@ -21,10 +21,10 @@ export const steamStrategy = new SteamStrategy(
         console.log("IDENTIFIER", identifier);
         console.log("PROFILE", profile);
 
-        verifySteam(profile.displayName, profile.id).then(_promise => {
+        verifySteam(profile.id, profile.displayName).then(_promise => {
             console.log("USER SUCCESFULLY VERIFIED!")
         }).catch(error => {
-            console.log("USER COULD NOT BE VERIFIED!")
+            console.log("USER COULD NOT BE VERIFIED!", error)
         })
 
         return done(null, profile);
@@ -33,10 +33,11 @@ export const steamStrategy = new SteamStrategy(
     }
 )
 
-const verifySteam = async (username: string, steamId: string) => {
-    updateUserSteam(username, steamId).then((_promise) => {
-        console.log("USER's STEAM HAS BEEN VERIFIED!", _promise);
-    }).catch(error => {
-        console.log("USER's STEAM COULD NOT BE VERIFIED!", error)  
-    })
+const verifySteam = async ( _steamId: string, _username: string) => {
+    // updateUserSteam(username, steamId).then((_promise) => {
+    //     console.log("USER's STEAM HAS BEEN VERIFIED!", _promise);
+    // }).catch(error => {
+    //     console.log("USER's STEAM COULD NOT BE VERIFIED!", error)  
+    // })
+    await setVerified(_steamId, _username)
 }

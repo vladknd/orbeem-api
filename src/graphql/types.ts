@@ -9,6 +9,8 @@ export const typedefUser = gql`
         surname: String!
         email: String!
         username: String
-        steamId: String
+        steamId: String!
+        balance: Int
+        verified: Boolean!
     }
 `
