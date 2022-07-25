@@ -28,6 +28,14 @@ export const resolveRegisterMutation = {
             steamId
         }: INewUser,
     ): Promise<IAuthRes> => {
+        console.log("REGISTER-MUTATION INITIATED:",
+            publicAddress,
+            email,
+            firstName,
+            surname, 
+            steamId
+        )
+        
         const authRes = await registerService({
             publicAddress,
             email,

@@ -60,6 +60,7 @@ export const loginService = async (authData: IAuthReq): Promise<IAuthRes> => {
 
 //_____________________________REGISTRATION-SERVICE________________________________
 export const registerService = async (newUser: INewUser): Promise<IAuthRes> => {
+    console.log("AUTH: REGISTER-SERVICE SERVICE INITIATED:", newUser)
     const user: User | null = await createUser({
         publicAddress: newUser.publicAddress,
         email: newUser.email,
