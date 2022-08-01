@@ -1,9 +1,11 @@
 import { gql } from 'apollo-server-express'
-import { INewUser } from '../../services/user.service'
+import { INewUser } from '../../services/user.services'
 import { 
     IAuthRes, 
     registerService 
-} from '../../services/auth.service'
+} from '../../services/auth.services'
+import { IAuth, IAuthError, IAuthSuccess } from '../../services/auth.interfaces'
+
 
 export const typedefRegisterMutation = gql`
     extend type Mutation {
@@ -13,7 +15,7 @@ export const typedefRegisterMutation = gql`
             firstName: String!,
             surname: String!
             steamId: String!
-        ): AuthRes
+        ): Auth
     }
 `
 
@@ -27,7 +29,7 @@ export const resolveRegisterMutation = {
             surname, 
             steamId
         }: INewUser,
-    ): Promise<IAuthRes> => {
+    ): Promise<IAuth | null> => {
         console.log("REGISTER-MUTATION INITIATED:",
             publicAddress,
             email,
@@ -36,15 +38,16 @@ export const resolveRegisterMutation = {
             steamId
         )
         
-        const authRes = await registerService({
-            publicAddress,
-            email,
-            firstName,
-            surname,
-            steamId
-        })
-        console.log("AUTH-RES:", authRes);
         
-        return authRes
+            const regRes = await registerService({
+                publicAddress,
+                email,
+                firstName,
+                surname,
+                steamId
+            })
+            console.log("REGISTER-MUTATION: REGISTER-SERVICE RESPONSE:", regRes);
+            return regRes
+        
     }
 }

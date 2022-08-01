@@ -14,10 +14,13 @@ import { resolveRegisterMutation } from "./mutations/register.mutation"
 import { resolveLoginMutation } from "./mutations/login.mutation"
 import { resolveVerifyJwtMutation } from "./mutations/verifyJWT.mutation"
 import { resolveMintTokensMutation } from "./mutations/mintTokens.mutation"
+//_____________________TYPES:
+import { authResolver } from './auth.resolver';
 
 //#--------------------BODY--------------------------------#
 const resolvers = {
    // scalarResolvers,
+   ...authResolver,
     Query: {
        ...resolveFindUserQuery,
        ...resolveFindUserByAddressQuery,

@@ -10,24 +10,12 @@ export interface INewUser {
 }
 
 //USER_____________________________________________________________________________
-export const createUser = async (_newUser: INewUser): Promise<User | null> => {
-    console.log("DB: CREATE-USER SERVICE INITIATED: ", _newUser)
-    try {
-        const user = await prismaClient.user.create({
-            data: {
-                nonce: Math.floor(Math.random() * 10000),
-                ..._newUser
-            }
-        })
-        return user
-        console.log("CREATED USER:", user)
-    } catch (error) {
-        console.log(error);
-        return null
-    }
+// export const createUser = async (_newUser: INewUser): Promise<User | null> => {
+//     console.log("DB: CREATE-USER SERVICE INITIATED: ", _newUser)
+    
     
      
-}
+// }
 export const findUser = async (_publicAddress: string): Promise<User | null> => {
     console.log("DB: FIND-USER SERVICE INITIATED:", _publicAddress);
     const user = await prismaClient.user.findUnique({

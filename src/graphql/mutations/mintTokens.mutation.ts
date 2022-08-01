@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server-express'
-import Game from '../../services/game.service';
-import { dischargeNFT } from '../../services/nft.service';
+import Game from '../../services/game.services';
+import { dischargeNFT } from '../../services/nft.services';
 
 export const typedefMintTokensMutation = gql`
 

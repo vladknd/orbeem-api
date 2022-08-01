@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express"
 import jwt from "jsonwebtoken"
-import { findUser } from "../../services/user.service"
+import { findUser } from "../../services/user.services"
 
 export const typedefVerifyJwtMutation = gql`
     extend type Mutation {

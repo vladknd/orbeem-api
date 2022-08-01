@@ -1,5 +1,5 @@
-import { dischargeNFT, getNFT, getNFTCharge, INFT, INFTData } from "./nft.service";
-import { findSteamID, findUser, getBalance, updateBalance } from "./user.service";
+import { dischargeNFT, getNFT, getNFTCharge, INFT, INFTData } from "./nft.services";
+import { findSteamID, findUser, getBalance, updateBalance } from "./user.services";
 import axios from 'axios'
 import { prisma, User } from "@prisma/client";
 

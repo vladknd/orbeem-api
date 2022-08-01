@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server-express'
-import { findUser } from '../../services/user.service'
+import { findUser } from '../../services/user.services'
 
 export const typedefFindUserByAddressQuery = gql`
     extend type Query {

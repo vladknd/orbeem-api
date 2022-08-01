@@ -13,4 +13,17 @@ export const typedefUser = gql`
         balance: Int
         verified: Boolean!
     }
+
+    type AuthError {
+        type: String!
+        message: String!
+    }
+    
+    type AuthSuccess {
+        user: User!
+        token: String!
+    }
+    
+    union Auth = AuthSuccess | AuthError
 `
+
