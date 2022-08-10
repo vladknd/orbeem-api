@@ -2,6 +2,7 @@ import { dischargeNFT, getNFT, getNFTCharge, INFT, INFTData } from "./nft.servic
 import { findSteamID, findUser, getBalance, updateBalance } from "./user.services";
 import axios from 'axios'
 import { prisma, User } from "@prisma/client";
+import { IAward } from "./game.interfaces";
 
 class Game {
     private KILL_FACTOR = 1;
@@ -43,41 +44,62 @@ class Game {
         console.log("THIS NFT DATA", this.nftData);
     }
 
-    public async claimTokens() {
+    public async claimTokens(): Promise<IAward> {
         if(this.nft && this.nftData){
-            const verified = await this.checkOwnership()
-            console.log("VER", verified)
-            
-            const charged = await this.checkCharged()
-            console.log("CHARGED", charged)
-            
-            if(verified && charged){
-                if(this.user){
-                    const matchResults = await this.calculateAward(this.nftData)
-                    console.log("MATCH RESULTS", matchResults);
+            try {
+                const verified = await this.checkOwnership()
+                console.log("VER", verified)
+                
+                const charged = await this.checkCharged()
+                console.log("CHARGED", charged)
+
+                const matchResults = await this.calculateAward(this.nftData)
+                console.log("MATCH RESULTS", matchResults);
                     
-                    return matchResults
-                }
-            }   
+                return matchResults
+            } catch (error) {
+                throw error
+            }
+            
+            // if(verified && charged){
+            //     if(this.user){
+            //         const matchResults = await this.calculateAward(this.nftData)
+            //         console.log("MATCH RESULTS", matchResults);
+                    
+            //         return matchResults
+            //     }
+            // }   
+        } else {
+            throw new Error("NO NFT")
         }
-        return null
+        // return null
     }
 
-    public async mintTokens() {
-        const claimed = await this.claimTokens()
-        
-        if(claimed && this.nft) {
-            await this.setBalance(claimed.award)
-            await dischargeNFT(this.nft.tokenID)
-            return claimed
+    public async mintTokens(): Promise<IAward> {
+        if(this.nft) {
+            try {
+                const claimed = await this.claimTokens()
+                await this.setBalance(claimed.award)
+                await dischargeNFT(this.nft.tokenID)
+                return claimed
+            } catch (error) {
+                throw error
+            }
+            
+        } else {
+            throw new Error("NO NFT")
         }
-        return null
+
     }
 
-    private async calculateAward(_nftData: INFTData){
+    private async calculateAward(_nftData: INFTData): Promise<IAward>{
         if(this.user){
             const res = await axios.get(`https://api.opendota.com/api/players/${this.user.steamId}/recentMatches`)
+            console.log("MATCG RES", res);
+            
             const data = res.data
+            console.log("MATCG DATA", data);
+            if(data.length === 0) throw new ErrorNoData
 
             const {kills, deaths, assists} = data[0]
             const award = Math.round(this.KILL_FACTOR*kills*_nftData.power - deaths/(this.DEATH_FACTOR*_nftData.durability) + this.ASSIST_FACTOR*assists*_nftData.intelligence)
@@ -89,6 +111,8 @@ class Game {
                 deaths,
                 assists
             }
+        } else {
+            throw new Error("NO USER")
         }
     }
 
@@ -138,23 +162,41 @@ class Game {
         return null
     } 
 
-    private checkOwnership() {
+    private checkOwnership(): boolean {
         if(this.user && this.nftData){
             console.log("PA", this.user.publicAddress);
             console.log("OWNER", this.nftData.owner);
     
-            if(this.user.publicAddress.toLowerCase() === this.nftData.owner.toLowerCase()) return true
+            if(this.user.publicAddress.toLowerCase() === this.nftData.owner.toLowerCase()) {
+                return true
+            } else {
+                throw new ErrorVerification
+            }
+        } else {
+            throw new Error("NO USER / NO NFT")
         }
+
         
     }   
 
-    private checkCharged(): boolean | null {
+    private checkCharged(): boolean {
         console.log("CHARGED",this.nft?.charged);
         if(this.nft){
-            return this.nft.charged 
+            const charge = this.nft.charged 
+            if(charge) {
+                return true
+            } else {
+                throw new ErrorDischarged
+            }
+        } else {
+            throw new Error("NO NFT")
         }
-        return null
+        
     }
 }
+
+export class ErrorDischarged extends Error {}
+export class ErrorVerification extends Error {}
+export class ErrorNoData extends Error {}
 
 export default Game

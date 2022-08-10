@@ -1,10 +1,9 @@
 import { gql } from 'apollo-server-express'
 import { INewUser } from '../../services/user.services'
 import { 
-    IAuthRes, 
     registerService 
 } from '../../services/auth.services'
-import { IAuth, IAuthError, IAuthSuccess } from '../../services/auth.interfaces'
+import { IAuth } from '../../services/auth.interfaces'
 
 
 export const typedefRegisterMutation = gql`

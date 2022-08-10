@@ -1,18 +1,18 @@
 import { gql } from 'apollo-server-express'
-import Game from '../../services/game.services';
+import Game, { ErrorDischarged, ErrorNoData, ErrorVerification } from '../../services/game.services';
 
 export const typedefClaimTokensQuery = gql`
-    type MatchResults {
-        award: Int!
-        kills: Int!
-        deaths: Int!
-        assists: Int!
-    }
+    # type MatchResults {
+    #     award: Int!
+    #     kills: Int!
+    #     deaths: Int!
+    #     assists: Int!
+    # }
     extend type Query {
         claimTokens (
             publicAddress: String!,
             tokenID: Int!
-        ): MatchResults
+        ): Claim
     }
 `;
 
@@ -31,7 +31,17 @@ export const resolveClaimTokensQuery = {
     ) => {
         const game = new Game(tokenID, publicAddress)
         await game.setGame()
-        const loot = await game.claimTokens()
-        return loot
+
+        try {
+            const claimed = await game.claimTokens()
+            console.log("MINTED", claimed);
+            
+            return {success: claimed}
+        } catch (error) {
+            if(error instanceof ErrorVerification) return { error: "ErrorVerification"}
+            else if(error instanceof ErrorDischarged) return { error: "ErrorDischarged"}
+            else if(error instanceof ErrorNoData) return {error: "ErrorNoData"}
+            throw new Error("MINT-TOKEN_MUTATION: UNKNOWN ERROR")
+        }
     }
 }

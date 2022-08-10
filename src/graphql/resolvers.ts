@@ -15,7 +15,7 @@ import { resolveLoginMutation } from "./mutations/login.mutation"
 import { resolveVerifyJwtMutation } from "./mutations/verifyJWT.mutation"
 import { resolveMintTokensMutation } from "./mutations/mintTokens.mutation"
 //_____________________TYPES:
-import { authResolver } from './auth.resolver';
+import { authResolver } from './type.resolver';
 
 //#--------------------BODY--------------------------------#
 const resolvers = {

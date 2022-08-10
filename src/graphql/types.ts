@@ -14,6 +14,7 @@ export const typedefUser = gql`
         verified: Boolean!
     }
 
+#______________AUTH____________________________________
     type AuthError {
         type: String!
         message: String!
@@ -25,5 +26,35 @@ export const typedefUser = gql`
     }
     
     union Auth = AuthSuccess | AuthError
+#____________________________________________________________
+
+#______________GAME____________________________________
+    type Award {
+        award: Int!
+        kills: Int!
+        deaths: Int!
+        assists: Int!
+    }
+
+    type MintSuccess {
+        success: Award!
+
+    }
+    type MintError {
+        error: String!
+    }
+    union Mint = MintSuccess | MintError
+
+
+    type ClaimSuccess {
+        success: Award!
+
+    }
+    type ClaimError {
+        error: String!
+    }
+    union Claim = ClaimSuccess | ClaimError
+#____________________________________________________________
 `
+
 

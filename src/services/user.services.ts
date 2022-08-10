@@ -20,7 +20,7 @@ export const findUser = async (_publicAddress: string): Promise<User | null> => 
     console.log("DB: FIND-USER SERVICE INITIATED:", _publicAddress);
     const user = await prismaClient.user.findUnique({
         where: {
-            publicAddress: _publicAddress
+            publicAddress: _publicAddress.toLowerCase()
         }
     })
     console.log("PRISMA FOUND USER:", user)
