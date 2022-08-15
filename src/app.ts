@@ -14,7 +14,8 @@ const session = require('express-session');
 import {contracts, config} from "./config";
 import initApolloServer from "./graphql/graphServer"
 import { steamStrategy } from "./passport"
-const ORB = require('./ABI/orb.json')
+// const ORB = require('./ABI/orb.json')
+import ORB from './ABI/orb'
 
 import { deductBalance, findUser, getBalance, updateUserSteam } from "./services/user.services"
 //#--------------------BODY----------------------------------------#
