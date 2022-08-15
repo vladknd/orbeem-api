@@ -30,7 +30,7 @@ export const typedefUser = gql`
 
 #______________GAME____________________________________
     type Award {
-        award: Int!
+        award: Float!
         kills: Int!
         deaths: Int!
         assists: Int!
