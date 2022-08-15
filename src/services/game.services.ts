@@ -91,10 +91,13 @@ class Game {
         }
 
     }
-
+    
     private async calculateAward(_nftData: INFTData): Promise<IAward>{
         if(this.user){
-            const res = await axios.get(`https://api.opendota.com/api/players/${this.user.steamId}/recentMatches`)
+            const id32 = Number(this.user.steamId.substr(-16,16)) - 6561197960265728
+            console.log("ID32", id32);
+            
+            const res = await axios.get(`https://api.opendota.com/api/players/${id32}/recentMatches`)
             console.log("MATCG RES", res);
             
             const data = res.data
@@ -204,3 +207,5 @@ export class ErrorVerification extends Error {}
 export class ErrorNoData extends Error {}
 
 export default Game
+
+console.log(Number("76561199134809825".substr(-16,16)) - 6561197960265728);
