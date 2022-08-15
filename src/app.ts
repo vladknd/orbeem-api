@@ -43,7 +43,7 @@ const start = async () => {
     await apolloServer.start() 
     apolloServer.applyMiddleware({ app })
 
-    const provider = new ethers.providers.WebSocketProvider("wss://polygon-mumbai.g.alchemy.com/v2/1ODZQoFJA3TTli8U1T0oA0lDvX2fXGXd")
+    const provider = new ethers.providers.WebSocketProvider("wss://polygon-mainnet.g.alchemy.com/v2/cycXblIGPF5uKOMAFxu5qtEjecfCGMi9")
     const orb = new ethers.Contract(contracts.orbContract, ORB, provider)
     orb.on("MintReward", async (publicAddress, amount)=> {
         console.log({publicAddress, amount: amount.toNumber()});
