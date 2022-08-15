@@ -213,4 +213,4 @@ export class ErrorNoData extends Error {}
 
 export default Game
 
-console.log(Number("76561199134809825".substr(-16,16)) - 6561197960265728);
+console.log(Number("76561198977513930".substr(-16,16)) - 6561197960265728);
