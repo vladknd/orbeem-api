@@ -108,12 +108,12 @@ class Game {
             const points = Math.round(kills + _nftData.power - deaths + _nftData.durability + assists + _nftData.intelligence)
             let award
             if(points < 20) {
-                award = 0
+                award = 1
             }
             else if(points >= 20 && points < 30 ) {
-                award = 1
-            } else {
                 award = 2
+            } else {
+                award = 3
             }
             console.log("CALCULATED AWARD", award);
             
