@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 
-export default {
+export const config = {
     // api: "http://orbeem-api.herokuapp.com",
     // client: "https://www.orbeem.store"
 
@@ -10,4 +10,8 @@ export default {
 
     api: process.env.API,
     client: process.env.CLIENT
+}
+
+export const contracts = {
+    orbContract: "0xD3f8e57a8cE7199950d556ae3C12A097cD902649"
 }

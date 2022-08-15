@@ -3,6 +3,7 @@
 
 //#--------------------GLOBAL-IMPORTS:-----------------------------#
 import cors from "cors";
+import { ethers } from "ethers";
 import express from "express"
 const passport =  require('passport')
 import jwt from "jsonwebtoken"
@@ -10,11 +11,12 @@ const cookieParser = require("cookie-parser");
 const session = require('express-session');
 
 //#--------------------LOCAL-IMPORTS:------------------------------#
-import config from "./config";
+import {contracts, config} from "./config";
 import initApolloServer from "./graphql/graphServer"
 import { steamStrategy } from "./passport"
+const ORB = require('./ABI/orb.json')
 
-import { findUser, getBalance, updateUserSteam } from "./services/user.services"
+import { deductBalance, findUser, getBalance, updateUserSteam } from "./services/user.services"
 //#--------------------BODY----------------------------------------#
 const start = async () => {
     
@@ -40,6 +42,12 @@ const start = async () => {
     await apolloServer.start() 
     apolloServer.applyMiddleware({ app })
 
+    const provider = new ethers.providers.WebSocketProvider("wss://polygon-mumbai.g.alchemy.com/v2/1ODZQoFJA3TTli8U1T0oA0lDvX2fXGXd")
+    const orb = new ethers.Contract(contracts.orbContract, ORB, provider)
+    orb.on("MintReward", async (publicAddress, amount)=> {
+        console.log({publicAddress, amount: amount.toNumber()});
+        await deductBalance(publicAddress.toLowerCase(), amount)
+    })
     // app.use(
     //     cors({
     //          origin: config.client, // allow to server to accept request from different origin

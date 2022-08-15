@@ -1,5 +1,5 @@
 const SteamStrategy = require('passport-steam').Strategy;
-import config from './config'
+import {config }from './config'
 import { setVerified, updateUserSteam } from './services/user.services';
 
 export const steamStrategy = new SteamStrategy(

@@ -89,7 +89,18 @@ export const getBalance = async (_publicAddress: string) => {
             publicAddress: _publicAddress
         }
     })
-    return user?.balance
+    if(user) return user.balance
+    else throw new Error("USER DOES NOT EXIST")
+    
+}
+
+export const deductBalance = async (_publicAddress: string, _amount: number) => {
+    const balance = await getBalance(_publicAddress)
+    const newBalance = balance - _amount
+    await updateBalance(_publicAddress, newBalance)
+    console.log("NEW BALANCE", newBalance);
+    
+
 }
 //_________________________________________________________________________________________________
 
