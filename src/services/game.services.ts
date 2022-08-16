@@ -16,7 +16,7 @@ class Game {
     private nft: INFT | null = null;
     private nftData: INFTData | null = null;
     
-    private subgraphURI: string =  "https://api.thegraph.com/subgraphs/name/vladknd/orbeem"
+    private subgraphURI: string =  "https://api.thegraph.com/subgraphs/name/vladknd/orbeemmain"
 
     constructor(_tokenID: number, _publicAddress: string) {
         this.tokenID = _tokenID
