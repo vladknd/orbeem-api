@@ -13,5 +13,5 @@ export const config = {
 }
 
 export const contracts = {
-    orbContract: "0xa2b4FD4EE39c9f04c1e534E238e0688F64fF395b"
+    orbContract: "0x7cBF2774872DB1948341532Be903f507EE0BF3f9"
 }

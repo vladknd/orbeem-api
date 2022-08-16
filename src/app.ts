@@ -89,9 +89,9 @@ const start = async () => {
     )
 
     app.get('/balance/:address', async (req, res) => {
-        console.log(req.params);
+        console.log("CHECK FOR BALANCE INIT:",req.params);
         const publicAddress = req.params.address
-        const balance = await getBalance(publicAddress)
+        const balance = await getBalance(publicAddress.toLowerCase())
         console.log(balance);
         
         res.send({balance})
