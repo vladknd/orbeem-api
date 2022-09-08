@@ -7,24 +7,20 @@ export const typedefMintTokensMutation = gql`
     extend type Mutation {
         mintTokens (
             publicAddress: String!,
-            tokenID: Int!
+            nftID: String!
         ): Mint
     }
 `;
 
-interface IArgs {
-    publicAddress: string,
-    tokenID: number
-}
 export const resolveMintTokensMutation = {
     mintTokens: async (
         source: undefined,
         {
             publicAddress,
-            tokenID
-        }: IArgs
+            nftID
+        }: { publicAddress: string, nftID: string}
     ) => {
-        const game = new Game(tokenID, publicAddress)
+        const game = new Game(nftID, publicAddress)
         await game.setGame()
         try {
             const minted = await game.mintTokens()
@@ -38,15 +34,4 @@ export const resolveMintTokensMutation = {
         }
         
     }
-    // Mint: {
-    //     __resolveType: (obj: any) => {
-    //         if(obj.success){
-    //             return "MintSucces"
-    //         }
-    //         if(obj.error){
-    //             return "MintError"
-    //         }
-    //     }
-    // }
-
 }

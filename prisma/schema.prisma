@@ -28,6 +28,6 @@ model User {
 }
 
 model Nft {
-  tokenID       Int     @unique
-  charged       Boolean @default(false)
+  nftID         String     @unique
+  charged       Boolean    @default(false)
 }

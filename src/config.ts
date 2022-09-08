@@ -7,7 +7,7 @@ export const config = {
 
     // api: "http://localhost:4000",
     // client: "http://localhost:3000"
-
+    subgraph: process.env.SUBGRAPH,
     api: process.env.API,
     client: process.env.CLIENT
 }

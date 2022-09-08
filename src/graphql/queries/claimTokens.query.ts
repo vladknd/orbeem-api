@@ -11,28 +11,27 @@ export const typedefClaimTokensQuery = gql`
     extend type Query {
         claimTokens (
             publicAddress: String!,
-            tokenID: Int!
+            nftID: String!
         ): Claim
     }
 `;
 
-interface IArgs {
-    publicAddress: string,
-    tokenID: number
-}
+
 export const resolveClaimTokensQuery = {
-    
     claimTokens: async (
         source: undefined,
         {
             publicAddress,
-            tokenID
-        }: IArgs
+            nftID
+        }: { publicAddress: string, nftID: string}
     ) => {
-        const game = new Game(tokenID, publicAddress)
+        console.log("HEEREEE 1", publicAddress, nftID);
+        const game = new Game(nftID, publicAddress)
+        
         await game.setGame()
 
         try {
+            console.log("HEEREEE");
             const claimed = await game.claimTokens()
             console.log("MINTED", claimed);
             
@@ -41,7 +40,7 @@ export const resolveClaimTokensQuery = {
             if(error instanceof ErrorVerification) return { error: "ErrorVerification"}
             else if(error instanceof ErrorDischarged) return { error: "ErrorDischarged"}
             else if(error instanceof ErrorNoData) return {error: "ErrorNoData"}
-            throw new Error("MINT-TOKEN_MUTATION: UNKNOWN ERROR")
+            throw new Error("CLAIM-TOKENS-MUTATION: UNKNOWN ERROR")
         }
     }
 }

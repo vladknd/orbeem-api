@@ -1,63 +1,35 @@
-import { prisma } from "@prisma/client";
+import { Nft, prisma } from "@prisma/client";
 import { prismaClient } from "../db";
 
 
-export interface INFT {
-    tokenID: number;
-    charged: boolean;
-}
-
-export interface INFTData {
-    name: string;
-    description: string;
-    tokenId: number;
-    itemId: number;
-    tokenURI: string;
-    image: string;
-
-    owner: string;
-    sold: boolean;
-    price: string;
-
-    level: number;
-
-    basePower: number;
-    baseDurability: number;
-    baseIntelligence: number;
-
-    power: number;
-    durability: number;
-    intelligence: number;
-}
-
-export const getNFT = async (_tokenID: number): Promise<INFT | null> => {
-    const _nft = await prismaClient.nft.findUnique({
+export const getNFT = async (_nftID: string): Promise<Nft | null> => {
+    const nft = await prismaClient.nft.findUnique({
         where: {
-            tokenID: _tokenID
+            nftID: _nftID
         }
     })
-    if(_nft) return _nft
+    if(nft) return nft
 
     const newNFT = await prismaClient.nft.create({
         data: {
-            tokenID: _tokenID,
+            nftID: _nftID,
             charged: true
         }
     })
-    console.log("nft has been recorded:", _nft)
+    console.log("nft has been recorded:", nft)
     
-    return _nft
+    return newNFT
 }
 
-export const getNFTCharge = async (tokenID: number): Promise<boolean> => {
+export const getNFTCharge = async (_nftID: string): Promise<boolean> => {
     const nft = await prismaClient.nft.findUnique({where: {
-        tokenID
+        nftID: _nftID
     }})
     if(nft) return nft.charged
 
     const newNFT = await prismaClient.nft.create({
         data: {
-            tokenID,
+            nftID: _nftID,
             charged: true
         }
     })
@@ -66,10 +38,10 @@ export const getNFTCharge = async (tokenID: number): Promise<boolean> => {
     return newNFT.charged
 }
 
-export const dischargeNFT = async (tokenID: number) => {
+export const dischargeNFT = async (_nftID: string) => {
     const updatedNFT = await prismaClient.nft.update({
         where: {
-            tokenID
+            nftID: _nftID
         },
         data: {
             charged: false
