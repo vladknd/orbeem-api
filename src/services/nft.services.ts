@@ -25,6 +25,8 @@ export const getNFTCharge = async (_nftID: string): Promise<boolean> => {
     const nft = await prismaClient.nft.findUnique({where: {
         nftID: _nftID
     }})
+    console.log("FIND NFT CHARGE", nft);
+    
     if(nft) return nft.charged
 
     const newNFT = await prismaClient.nft.create({
