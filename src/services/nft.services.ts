@@ -50,3 +50,17 @@ export const dischargeNFT = async (_nftID: string) => {
         }
     })
 }
+
+export const chargeNFTs = async (): Promise<Nft[]> => {
+    await prismaClient.nft.updateMany({
+        where: {}, 
+        data: {
+            charged: true
+        }
+    })
+    const nfts = prismaClient.nft.findMany()
+
+    // console.log("NFT-SERVICE: NFTs HAVE BEEN CHARGED", nfts, typeof nfts);
+    return nfts
+}
+    
