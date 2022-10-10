@@ -9,20 +9,25 @@ const passport =  require('passport')
 import jwt from "jsonwebtoken"
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
+const cron = require("node-cron")
 
 //#--------------------LOCAL-IMPORTS:------------------------------#
-import {contracts, config} from "./config";
+import {
+    contracts, 
+    config
+} from "./config";
 import initApolloServer from "./graphql/graphServer"
 import { steamStrategy } from "./passport"
-// const ORB = require('./ABI/orb.json')
 import ORB from './ABI/orb'
 
-import { deductBalance, findUser, getBalance, updateUserSteam } from "./services/user.services"
+import { 
+    deductBalance,  
+    getBalance
+} from "./services/user.services"
+import { chargeNFTs } from "./services/nft.services";
 //#--------------------BODY----------------------------------------#
 const start = async () => {
-    
-
-    //___________________________PASSPORT________________________
+    //_____________________________________________________PASSPORT:
     passport.serializeUser((user: any, done: any) => {
         done(null, user);
     });
@@ -32,7 +37,8 @@ const start = async () => {
     });
   
     passport.use(steamStrategy)
-    //________________________________________________________________
+    //_____________________________________________________________
+
 
 
     const apolloServer = initApolloServer()
@@ -43,12 +49,18 @@ const start = async () => {
     await apolloServer.start() 
     apolloServer.applyMiddleware({ app })
 
-    const provider = new ethers.providers.WebSocketProvider("wss://polygon-mainnet.g.alchemy.com/v2/cycXblIGPF5uKOMAFxu5qtEjecfCGMi9")
+    //___________________________________ORB MINT LISTENER:
+    const provider = new ethers.providers.WebSocketProvider(
+        "wss://polygon-mainnet.g.alchemy.com/v2/cycXblIGPF5uKOMAFxu5qtEjecfCGMi9"
+    )
     const orb = new ethers.Contract(contracts.orbContract, ORB, provider)
-    orb.on("MintReward", async (publicAddress, amount)=> {
+    orb.on("MintReward", async (publicAddress, amount) => {
         console.log({publicAddress, amount: amount.toNumber()});
         await deductBalance(publicAddress.toLowerCase(), amount)
     })
+    //_____________________________________________________
+
+    //_________________________________________________CORS:
     // app.use(
     //     cors({
     //          origin: config.client, // allow to server to accept request from different origin
@@ -56,7 +68,9 @@ const start = async () => {
     //          credentials: true, // allow session cookie from browser to pass through
     //    })
     // )
+    //_____________________________________________________
 
+    //_______________________SESSION:
     app.use(session(
         {
             secret: 'your secret',
@@ -67,17 +81,18 @@ const start = async () => {
             }
         })
     );
+    //_______________________________
 
+    //_________________________________________STEAM-AUTH:
     app.use(passport.initialize())
     app.use(passport.session())
-
     app.get('/api/auth/steam', 
         passport.authenticate('steam', {failureRedirect: '/'}), 
         (req, res) => {
             console.log("REQ_USER_1", req.user);
         }
     )
-   
+    
     app.get('/api/auth/steam/return', 
         passport.authenticate('steam', {failureRedirect: '/'}), 
         (req, res) => {
@@ -87,7 +102,9 @@ const start = async () => {
             res.redirect(`${config.client}/dashboard`)
         }
     )
+    //_____________________________________________________
 
+    //_____________________________________ORACLE-MINTER:
     app.get('/balance/:address', async (req, res) => {
         console.log("CHECK FOR BALANCE INIT:",req.params);
         const publicAddress = req.params.address
@@ -99,6 +116,17 @@ const start = async () => {
     app.post('/api/update-steam', (req, res) => {
         console.log(req)
     })
+    //________________________________________________________
+
+    //______________________CRON CHARGER:
+    cron.schedule('0 0 * * *', () => {
+        chargeNFTs().then(_promise => {
+            console.log("NFTs HAVE BEEN charged");
+        })
+    })
+    //____________________________________
+
+
 
 
     app.listen(process.env.PORT || 4000, () => {
